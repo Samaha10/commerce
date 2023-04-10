@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+    <br><br>
+    {% for listing in listings %}
+    {% if not listing.closed %}
+    <div style="border-width:2px; border-style:solid; padding: 15px; border-color: grey; ">
+        <h3>{{listing.title}}</h3>
+        <h4>Price: {{listing.price}}</h4>
+        <p>{{listing.description}}</p>
+        {% if listing.image %}
+        <img src="{{listing.image}}" style="width:500px;height:400px;" >
+        {%endif%}
+        <br> <br>
+        <a href="{% url 'listing_page' listing.id%}">Visit listing</a>
+    </div>
+    <br></br>
+        
+    {% endif %}
+    {%endfor%}
+{% endblock %}

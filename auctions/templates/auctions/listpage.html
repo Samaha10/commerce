@@ -1,0 +1,85 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div>
+        <h2>Listing: {{listing.title}}</h2>
+    </div>
+    <form action="{% url 'listing_page' listing.id%}" method="post">
+        {% csrf_token %}
+        <input class="btn btn-primary" name="watch" style="color:royalblue; background-color: yellow;" type="submit" value="Watchlist"><br>
+    </form>
+    <br>
+    <div>
+        <h4>$ {{listing.price}}</h4>
+    </div>
+    <br>
+    <div>
+        {% if listing.image %}
+        <img src="{{listing.image}}" style="width:400px;height:400px;" > 
+        {%endif%}
+    </div>
+
+    <br>
+    
+    {% if not listing.closed %}
+    {% if owner_option %}
+    <form action="{% url 'listing_page' listing.id %}" method="post">
+        {% csrf_token %}
+        <input class="btn btn-primary" id = "close_auction"type="submit" value="Close listing"><br></br>
+    </form>
+    {% else %}
+    <form action="{% url 'listing_page' listing.id%}" method="post">
+        {% csrf_token %}
+        <p>{{num}} so far, Your bid is the current bid</p>
+        <input type="text" id="val" name="val" placeholder="Bid"><br>
+        <input class="btn btn-primary" style="color:white; background-color: royalblue;" type="submit" value="Submit"><br><br>
+    </form>
+    {% endif %}
+    
+    {% else %}
+        <h2>This auction is closed.</h2>
+        {% if winner %}
+        <h2>You won the auction!</h2>
+        {% endif %}
+    {% endif %}
+    <br>
+    <h6>Details</h6>
+    <ul>
+        <li>Listed by {{listing.owner}}</li>
+        {% if listing.category %}
+        <li>Category: {{listing.category}}</li>
+        {% else %}
+        <li>Category: No Category listed</li>
+        {% endif %}
+    </ul>  
+    <br>
+
+    <form action="{% url 'listing_page' listing.id %}" method="post">
+        {% csrf_token %}
+        
+            <h4>Leave a comment</h4>
+            <textarea name="comment" id="comment" cols="50" rows="10" ></textarea><br>
+            <button type="submit" style="color:white; background-color: red;"  class="btn">Post Comment</button>
+        
+    </form>
+    <br>
+   
+    <h3>Comments</h3>
+    <br>
+        {% for comment in comments%}
+        <div style="border:royalblue; border-width:2px; border-style:solid; padding: 15px; width:50%;">
+        <p >{{comment.tweet}}</p>
+        <small style="color:gray;">{{comment.owner}}</small>
+        </div>
+        
+        <br>
+        {% empty %}
+        <p>No comments yet</p>
+        {%endfor%}
+        
+    
+{% endblock %}
+
+    
+
+
